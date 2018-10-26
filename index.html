@@ -23,7 +23,7 @@ p {
 	border: thin solid #fc3fd4;
 	padding: 5px;
 	background-color: #ff75e2;
-	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	font-family: sans-serif;
 	font-weight: bold;
 	color: #fc3fd4;
 	width: 75px;
@@ -49,7 +49,7 @@ p {
 </div>
 <u><h2>No-Fuss Bibliographies</h2></u>
 <h3>Physical Book</h3>
-<form onsubmit="return citeBook();return false">
+<form onsubmit="citeBook();return false">
   Creator: <input type="text" id="fname1A" size="10"  placeholder="First Name*">
   <input type="text" id="mname1A" size="10" placeholder="Middle Name*">
   <input type="text" id="lname1A" size="10" placeholder="Last Name*"><br>
@@ -62,14 +62,34 @@ p {
   <input type="text" id="lname3A" size="10" placeholder="Last Name*"><br>
   Title: <input type="text" id="titleA" size="20" ><br>
   Publisher: <input type="text" id="publisherA" size="20"><br>
-  City of Publication: <input type="text" id="cityA" size="20"><br> **
+  City of Publication: <input type="text" id="cityA" size="20"> ** <br>
   Date Published: <input type="date" id="date1A"><br>
   <input type="submit" class="buttonStyle" value="Submit"> 
 </form>
-<a id="book1"></a><i id="book2"></i><a id="book3"></a>
+<h3>Webpage (WIP)</h3>
+<form onsubmit="citeWeb();return false">
+  Creator: <input type="text" id="fname1B" size="10"  placeholder="First Name*">
+  <input type="text" id="mname1B" size="10" placeholder="Middle Name*">
+  <input type="text" id="lname1B" size="10" placeholder="Last Name*"><br>
+  Second Creator, if applicable: <input type="text" id="fname2B" size="10"  placeholder="First Name*">
+  <input type="text" id="mname2B" size="10" placeholder="Middle Name*">
+  <input type="text" id="lname2B" size="10" placeholder="Last Name*"><br>
+  More Creators? <input type="checkbox" id="pluralA" title="plural"><br>
+  Editor, if applicable: <input type="text" id="fname3B" size="10"  placeholder="First Name*">
+  <input type="text" id="mname3B" size="10" placeholder="Middle Name*">
+  <input type="text" id="lname3B" size="10" placeholder="Last Name*"><br>
+  Page Title: <input type="text" id="titleB" size="20" ><br>
+  Website: <input type="text" id="siteNameB" size="20"><br>
+  Publisher: <input type="text" id="publisherB" size="20"><br>
+  URL: <input type="text" id="urlB" size="30"> ** <br>
+  Date Published: <input type="date" id="date1B"><br>
+  Date Accessed: <input type="date" id="date2B"><br>
+  <input type="submit" class="buttonStyle" value="Submit"> 
+</form>
+<a id="web1"></a><i id="web2"></i><a id="web3"></a>
 <p>*If using initial(s), please include period.</p>
-<p>**City of Publication should only be used  if the publisher has offices in more than one country or is unknown outside North America.</p>
-<h6>Version 0.5, by Bill Brightbulb</h6>
+<p>**Do not include "https://"</p>
+<h6>Version 1.0 by Bill Brightbulb</h6>
 <script> 
 function numToMonth(m){
 	switch(m){
@@ -101,8 +121,8 @@ function numToMonth(m){
 }
 function citeBook(){
     //var mm1 = numToMonth(parseInt(document.getElementById("date1A").value.substring(5, 7), 10));
-    //var dd1 = parseInt(document.getElementById("date1A").value.substring(8, 10), 10);
-    var yyyy1 = parseInt(document.getElementById("date1A").value.substring(0, 4), 10);
+    //var dd1 = document.getElementById("date1A").value.substring(8, 10);
+    var yyyy1 = document.getElementById("date1A").value.substring(0, 4);
     var title = document.getElementById("titleA").value;
     var publisher = document.getElementById("publisherA").value;
     var city = document.getElementById("cityA").value;
@@ -112,14 +132,11 @@ function citeBook(){
     var fname2 = document.getElementById("fname2A").value;
     var mname2 = document.getElementById("mname2A").value;
     var lname2 = document.getElementById("lname2A").value;
-    var fname3 = document.getElementById("fname2A").value;
-    var mname3 = document.getElementById("mname2A").value;
-    var lname3 = document.getElementById("lname2A").value;
-    var plural = document.getElementById("pluralA").value;
-    if(fname1.size>0 && lname1.size>0){
-    	lname1 += ", ";
-    }
-    if(mname1.size>0){
+    var fname3 = document.getElementById("fname3A").value;
+    var mname3 = document.getElementById("mname3A").value;
+    var lname3 = document.getElementById("lname3A").value;
+    var plural = document.getElementById("pluralA").checked;
+    if(mname1.length>0){
     	if(mname1.indexOf(".") != mname1.length-1){
     		mname1 = " " + mname1.substring(0, 1) + ". ";
     	} else {
@@ -127,43 +144,146 @@ function citeBook(){
     	}
     } else if(fname1.indexOf(".") == fname1.length-1){
     	fname1 += " ";
-    } else {
+    } else if(fname2.length===0 && lname2.length===0 && fname1.length>0){
     	fname1 += ". ";
     }
-    if(plural.size>0){
+    if(plural){
     	plural="et al. ";
     	fname2="";
     	mname2="";
     	lname2="";
-    } else if(fname2.size>0 || lname2.size>0){
-    	fname1 = " and " + fname2;
-    	if(lname2 === lname1){
-    		lname2="";
-    	}
-    	if(mname2.size>0){
-    		if(mname2.indexOf(".") != mname2.length-1){
-    			mname2 = mname2.substring(0, 1) + ". ";
+    } else {
+    	plural = "";
+    	if(fname2.length>0 || lname2.length>0){
+    		mname1 += " and ";
+    		if(lname2 === lname1){
+    			lname2="";
+    		}
+    		if(mname2.length>0){
+    			if(mname2.indexOf(".") != mname2.length-1){
+    				mname2 = mname2.substring(0, 1) + ". ";
+    			}
+    			mname2 = " " +mname2;
+    		}
+    		if(lname2.length>0 && (publisher.length>0 || yyyy1.length>0)){
+    			lname2+=". ";
     		}
     	}
-    	lname2+=".";
     }
-    if(fname3.size>0 || lname3.size>0){
-    	fname3="Translated by " + fname3;
-    	if(mname3.size>0){
+    if((fname1.length>0 || mname1.length>0) && lname1.length>0){
+    	lname1 += ", ";
+    }
+    if(fname3.length>0 || lname3.length>0){
+    	fname3="Translated by " + fname3 + " ";
+    	if(mname3.length>0){
     		if(mname3.indexOf(".") != mname3.length-1){
-    			mname3 = mname3.substring(0, 1) + ".";
+    			mname3 = mname3.substring(0, 1) + ". ";
     		}
     	}
+    	lname3 += ", ";
     }
-    if(publisher.size > 0 && yyyy1 > 0){
-    	yyyy1 = ", " + yyyy1;
+    if(undefined === yyyy1){
+    	yyyy1="";
     }
-    if(city.size>0 && yyyy1 < 1900){
+    if(city.length>0 && 1900>parseInt(yyyy1, 10)){
+    	if(publisher.length===0){
+    		publisher="n. p";
+    	}
     	publisher = city + ", " + publisher;
+    }
+    if(publisher.length===0){
+    	publisher="n. p";
+    }
+    if(yyyy1.length > 0){
+    	yyyy1 = "., " + yyyy1;
     }
     document.getElementById("book1").innerHTML=lname1+fname1+mname1+fname2+mname2+lname2+plural;
     document.getElementById("book2").innerHTML=title+". ";
-    document.getElementById("book3").innerHTML=publisher+yyyy1;
+    document.getElementById("book3").innerHTML=fname3+mname3+lname3+publisher+yyyy1+".";
+}
+function citeWeb(){
+    var mm1 = numToMonth(parseInt(document.getElementById("date1A").value.substring(5, 7), 10));
+    var dd1 = document.getElementById("date1B").value.substring(8, 10);
+    var yyyy1 = document.getElementById("date1B").value.substring(0, 4);
+    var title = document.getElementById("titleB").value;
+    var publisher = document.getElementById("publisherB").value;
+    var city = document.getElementById("cityB").value;
+    var fname1 = document.getElementById("fname1B").value;
+    var mname1 = document.getElementById("mname1B").value;
+    var lname1 = document.getElementById("lname1B").value;
+    var fname2 = document.getElementById("fname2B").value;
+    var mname2 = document.getElementById("mname2B").value;
+    var lname2 = document.getElementById("lname2B").value;
+    var fname3 = document.getElementById("fname3B").value;
+    var mname3 = document.getElementById("mname3B").value;
+    var lname3 = document.getElementById("lname3B").value;
+    var plural = document.getElementById("pluralB").checked;
+    var url = document.getElementById("urlB").value;
+    var siteName = document.getElementById("siteNameB").value;
+    if(mname1.length>0){
+    	if(mname1.indexOf(".") != mname1.length-1){
+    		mname1 = " " + mname1.substring(0, 1) + ". ";
+    	} else {
+    		mname1 = " " + mname1 + " ";
+    	}
+    } else if(fname1.indexOf(".") == fname1.length-1){
+    	fname1 += " ";
+    } else if(fname2.length===0 && lname2.length===0 && fname1.length>0){
+    	fname1 += ". ";
+    }
+    if(plural){
+    	plural="et al. ";
+    	fname2="";
+    	mname2="";
+    	lname2="";
+    } else {
+    	plural = "";
+    	if(fname2.length>0 || lname2.length>0){
+    		mname1 += " and ";
+    		if(lname2 === lname1){
+    			lname2="";
+    		}
+    		if(mname2.length>0){
+    			if(mname2.indexOf(".") != mname2.length-1){
+    				mname2 = mname2.substring(0, 1) + ". ";
+    			}
+    			mname2 = " " +mname2;
+    		}
+    		if(lname2.length>0 && (publisher.length>0 || yyyy1.length>0)){
+    			lname2+=". ";
+    		}
+    	}
+    }
+    if((fname1.length>0 || mname1.length>0) && lname1.length>0){
+    	lname1 += ", ";
+    }
+    if(fname3.length>0 || lname3.length>0){
+    	fname3="Translated by " + fname3 + " ";
+    	if(mname3.length>0){
+    		if(mname3.indexOf(".") != mname3.length-1){
+    			mname3 = mname3.substring(0, 1) + ". ";
+    		}
+    	}
+    	lname3 += ", ";
+    }
+    if(undefined === yyyy1){
+    	yyyy1="";
+    }
+    if(city.length>0 && 1900>parseInt(yyyy1, 10)){
+    	if(publisher.length===0){
+    		publisher="n. p";
+    	}
+    	publisher = city + ", " + publisher;
+    }
+    if(publisher.length===0){
+    	publisher="n. p";
+    }
+    if(yyyy1.length > 0){
+    	yyyy1 = "., " + yyyy1;
+    }
+    document.getElementById("web1").innerHTML=lname1+fname1+mname1+fname2+mname2+lname2+plural;
+    document.getElementById("web2").innerHTML=title+". ";
+    document.getElementById("web3").innerHTML=fname3+mname3+lname3+publisher+yyyy1+".";
 }
 </script>
 </body>
