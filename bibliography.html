@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<!-- HTML5 Hello world by kirupa - http://www.kirupa.com/html5/getting_your_feet_wet_html5_pg1.htm -->
+<html lang="en-us">
+
+<head>
+<meta charset="utf-8">
+<title>Hello...</title>
+<style type="text/css">
+body {
+	font-family: "Times New Roman";
+	text-align: left;
+	font-weight: normal;
+	background-color: #ffddf8;
+}
+a i {
+	font-size: 12px;
+}
+p {
+	font-size: 10px;
+}
+.buttonStyle {
+	border-radius: 4px;
+	border: thin solid #fc3fd4;
+	padding: 5px;
+	background-color: #ff75e2;
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	font-weight: bold;
+	color: #fc3fd4;
+	width: 75px;
+}
+
+.buttonStyle:hover {
+	border: thin solid #ff56db;
+	background-color: #ff91e8;
+	color: #ff56db;
+	cursor: pointer;
+}
+.buttonStyle:active {
+	border: thin solid #f966da;
+	background-color: #ff96e9;
+	color: #f966da;
+	cursor: pointer;
+}
+
+</style>
+</head>
+<body>
+<div id="mainContent">
+</div>
+<u><h2>No-Fuss Bibliographies</h2></u>
+<h3>Physical Book</h3>
+<form onsubmit="return citeBook();return false">
+  Creator: <input type="text" id="fname1A" size="10"  placeholder="First Name*">
+  <input type="text" id="mname1A" size="10" placeholder="Middle Name*">
+  <input type="text" id="lname1A" size="10" placeholder="Last Name*"><br>
+  Second Creator, if applicable: <input type="text" id="fname2A" size="10"  placeholder="First Name*">
+  <input type="text" id="mname2A" size="10" placeholder="Middle Name*">
+  <input type="text" id="lname2A" size="10" placeholder="Last Name*"><br>
+  More Creators? <input type="checkbox" id="pluralA" title="plural"><br>
+  Translator, if applicable: <input type="text" id="fname3A" size="10"  placeholder="First Name*">
+  <input type="text" id="mname3A" size="10" placeholder="Middle Name*">
+  <input type="text" id="lname3A" size="10" placeholder="Last Name*"><br>
+  Title: <input type="text" id="titleA" size="20" ><br>
+  Publisher: <input type="text" id="publisherA" size="20"><br>
+  City of Publication: <input type="text" id="cityA" size="20"><br> **
+  Date Published: <input type="date" id="date1A"><br>
+  <input type="submit" class="buttonStyle" value="Submit"> 
+</form>
+<a id="book1"></a><i id="book2"></i><a id="book3"></a>
+<p>*If using initial(s), please include period.</p>
+<p>**City of Publication should only be used  if the publisher has offices in more than one country or is unknown outside North America.</p>
+<h6>Version 1.0, by Bill Brightbulb</h6>
+<script> 
+function numToMonth(m){
+	switch(m){
+		case 1:
+			return "January";
+		case 2:
+			return "February";
+		case 3:
+			return "March";
+		case 4:
+			return "April";
+		case 5:
+			return "May";
+		case 6:
+			return "June";
+		case 7:
+			return "July";
+		case 8:
+			return "August";
+		case 9:
+			return "September";
+		case 10:
+			return "October";
+		case 11:
+			return "November";
+		case 12:
+			return "December";
+	}
+}
+function citeBook(){
+    //var mm1 = numToMonth(parseInt(document.getElementById("date1A").value.substring(5, 7), 10));
+    //var dd1 = parseInt(document.getElementById("date1A").value.substring(8, 10), 10);
+    var yyyy1 = parseInt(document.getElementById("date1A").value.substring(0, 4), 10);
+    var title = document.getElementById("titleA").value;
+    var publisher = document.getElementById("publisherA").value;
+    var city = document.getElementById("cityA").value;
+    var fname1 = document.getElementById("fname1A").value;
+    var mname1 = document.getElementById("mname1A").value;
+    var lname1 = document.getElementById("lname1A").value;
+    var fname2 = document.getElementById("fname2A").value;
+    var mname2 = document.getElementById("mname2A").value;
+    var lname2 = document.getElementById("lname2A").value;
+    var fname3 = document.getElementById("fname2A").value;
+    var mname3 = document.getElementById("mname2A").value;
+    var lname3 = document.getElementById("lname2A").value;
+    var plural = document.getElementById("pluralA").value;
+    if(fname1.size>0 && lname1.size>0){
+    	lname1 += ", ";
+    }
+    if(mname1.size>0){
+    	if(mname1.indexOf(".") != mname1.length-1){
+    		mname1 = " " + mname1.substring(0, 1) + ". ";
+    	} else {
+    		mname1 = " " + mname1 + " ";
+    	}
+    } else if(fname1.indexOf(".") == fname1.length-1){
+    	fname1 += " ";
+    } else {
+    	fname1 += ". ";
+    }
+    if(plural.size>0){
+    	plural="et al. ";
+    	fname2="";
+    	mname2="";
+    	lname2="";
+    } else if(fname2.size>0 || lname2.size>0){
+    	fname1 = " and " + fname2;
+    	if(lname2 === lname1){
+    		lname2="";
+    	}
+    	if(mname2.size>0){
+    		if(mname2.indexOf(".") != mname2.length-1){
+    			mname2 = mname2.substring(0, 1) + ". ";
+    		}
+    	}
+    	lname2+=".";
+    }
+    if(fname3.size>0 || lname3.size>0){
+    	fname3="Translated by " + fname3;
+    	if(mname3.size>0){
+    		if(mname3.indexOf(".") != mname3.length-1){
+    			mname3 = mname3.substring(0, 1) + ".";
+    		}
+    	}
+    }
+    if(publisher.size > 0 && yyyy1 > 0){
+    	yyyy1 = ", " + yyyy1;
+    }
+    if(city.size>0 && yyyy1 < 1900){
+    	publisher = city + ", " + publisher;
+    }
+    document.getElementById("book1").innerHTML=lname1+fname1+mname1+fname2+mname2+lname2+plural;
+    document.getElementById("book2").innerHTML=title+". ";
+    document.getElementById("book3").innerHTML=publisher+yyyy1;
+}
+</script>
+</body>
+</html>
