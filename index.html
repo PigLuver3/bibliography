@@ -66,6 +66,9 @@ p {
   Date Published: <input type="date" id="date1A"><br>
   <input type="submit" class="buttonStyle" value="Submit"> 
 </form>
+<a id="book1"></a><i id="book2"></i><a id="book3"></a>
+<p>*If using initial(s), please include period.</p>
+<p>**City of Publication should only be used if the publisher has offices in more than one country or is unknown outside North America."</p>
 <h3>Webpage (WIP)</h3>
 <form onsubmit="citeWeb();return false">
   Creator: <input type="text" id="fname1B" size="10"  placeholder="First Name*">
@@ -75,9 +78,6 @@ p {
   <input type="text" id="mname2B" size="10" placeholder="Middle Name*">
   <input type="text" id="lname2B" size="10" placeholder="Last Name*"><br>
   More Creators? <input type="checkbox" id="pluralA" title="plural"><br>
-  Editor, if applicable: <input type="text" id="fname3B" size="10"  placeholder="First Name*">
-  <input type="text" id="mname3B" size="10" placeholder="Middle Name*">
-  <input type="text" id="lname3B" size="10" placeholder="Last Name*"><br>
   Page Title: <input type="text" id="titleB" size="20" ><br>
   Website: <input type="text" id="siteNameB" size="20"><br>
   Publisher: <input type="text" id="publisherB" size="20"><br>
@@ -94,29 +94,29 @@ p {
 function numToMonth(m){
 	switch(m){
 		case 1:
-			return "January";
+			return " Jan. ";
 		case 2:
-			return "February";
+			return " Feb. ";
 		case 3:
-			return "March";
+			return " Mar. ";
 		case 4:
-			return "April";
+			return " Apr. ";
 		case 5:
-			return "May";
+			return " May ";
 		case 6:
-			return "June";
+			return " June ";
 		case 7:
-			return "July";
+			return " July ";
 		case 8:
-			return "August";
+			return " Aug. ";
 		case 9:
-			return "September";
+			return " Sep. ";
 		case 10:
-			return "October";
+			return " Oct. ";
 		case 11:
-			return "November";
+			return " Nov. ";
 		case 12:
-			return "December";
+			return " Dec. ";
 	}
 }
 function citeBook(){
@@ -195,16 +195,19 @@ function citeBook(){
     	publisher="n. p";
     }
     if(yyyy1.length > 0){
-    	yyyy1 = "., " + yyyy1;
+    	yyyy1 = ", " + yyyy1;
     }
     document.getElementById("book1").innerHTML=lname1+fname1+mname1+fname2+mname2+lname2+plural;
     document.getElementById("book2").innerHTML=title+". ";
     document.getElementById("book3").innerHTML=fname3+mname3+lname3+publisher+yyyy1+".";
 }
 function citeWeb(){
-    var mm1 = numToMonth(parseInt(document.getElementById("date1A").value.substring(5, 7), 10));
-    var dd1 = document.getElementById("date1B").value.substring(8, 10);
+    var mm1 = numToMonth(parseInt(document.getElementById("date1B").value.substring(5, 7), 10));
+    var dd1 = parseInt(document.getElementById("date1B").value.substring(8, 10), 10);
     var yyyy1 = document.getElementById("date1B").value.substring(0, 4);
+    var mm2 = numToMonth(parseInt(document.getElementById("date2B").value.substring(5, 7), 10));
+    var dd2 = parseInt(document.getElementById("date2B").value.substring(8, 10), 10);
+    var yyyy2 = document.getElementById("date2B").value.substring(0, 4);
     var title = document.getElementById("titleB").value;
     var publisher = document.getElementById("publisherB").value;
     var city = document.getElementById("cityB").value;
@@ -214,9 +217,6 @@ function citeWeb(){
     var fname2 = document.getElementById("fname2B").value;
     var mname2 = document.getElementById("mname2B").value;
     var lname2 = document.getElementById("lname2B").value;
-    var fname3 = document.getElementById("fname3B").value;
-    var mname3 = document.getElementById("mname3B").value;
-    var lname3 = document.getElementById("lname3B").value;
     var plural = document.getElementById("pluralB").checked;
     var url = document.getElementById("urlB").value;
     var siteName = document.getElementById("siteNameB").value;
@@ -257,33 +257,21 @@ function citeWeb(){
     if((fname1.length>0 || mname1.length>0) && lname1.length>0){
     	lname1 += ", ";
     }
-    if(fname3.length>0 || lname3.length>0){
-    	fname3="Translated by " + fname3 + " ";
-    	if(mname3.length>0){
-    		if(mname3.indexOf(".") != mname3.length-1){
-    			mname3 = mname3.substring(0, 1) + ". ";
-    		}
-    	}
-    	lname3 += ", ";
-    }
     if(undefined === yyyy1){
     	yyyy1="";
     }
-    if(city.length>0 && 1900>parseInt(yyyy1, 10)){
-    	if(publisher.length===0){
-    		publisher="n. p";
-    	}
-    	publisher = city + ", " + publisher;
+    if(publisher === siteName && siteName.length >0){
+      publisher = "";
     }
-    if(publisher.length===0){
-    	publisher="n. p";
+    if(city.length>0 && 1900>parseInt(yyyy1, 10)){
+    	publisher = city + ", " + publisher;
     }
     if(yyyy1.length > 0){
     	yyyy1 = "., " + yyyy1;
     }
-    document.getElementById("web1").innerHTML=lname1+fname1+mname1+fname2+mname2+lname2+plural;
-    document.getElementById("web2").innerHTML=title+". ";
-    document.getElementById("web3").innerHTML=fname3+mname3+lname3+publisher+yyyy1+".";
+    document.getElementById("web1").innerHTML=lname1+fname1+mname1+fname2+mname2+lname2+plural + "\“" + title +"\”";
+    document.getElementById("web2").innerHTML=siteName;
+    document.getElementById("web3").innerHTML=". " + publisher + dd1 + mm1 + yyyy1 + url + ". Accessed " + dd2 + mm2 + yyyy2;
 }
 </script>
 </body>
