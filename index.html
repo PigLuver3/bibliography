@@ -69,7 +69,7 @@ p {
 <a id="book1"></a><i id="book2"></i><a id="book3"></a>
 <p>*If using initial(s), please include period.</p>
 <p>**City of Publication should only be used if the publisher has offices in more than one country or is unknown outside North America."</p>
-<h3>Webpage (WIP)</h3>
+<h3>Webpage</h3>
 <form onsubmit="citeWeb();return false">
   Creator: <input type="text" id="fname1B" size="10"  placeholder="First Name*">
   <input type="text" id="mname1B" size="10" placeholder="Middle Name*">
@@ -77,7 +77,7 @@ p {
   Second Creator, if applicable: <input type="text" id="fname2B" size="10"  placeholder="First Name*">
   <input type="text" id="mname2B" size="10" placeholder="Middle Name*">
   <input type="text" id="lname2B" size="10" placeholder="Last Name*"><br>
-  More Creators? <input type="checkbox" id="pluralA" title="plural"><br>
+  More Creators? <input type="checkbox" id="pluralB" title="plural"><br>
   Page Title: <input type="text" id="titleB" size="20" ><br>
   Website: <input type="text" id="siteNameB" size="20"><br>
   Publisher: <input type="text" id="publisherB" size="20"><br>
@@ -89,7 +89,7 @@ p {
 <a id="web1"></a><i id="web2"></i><a id="web3"></a>
 <p>*If using initial(s), please include period.</p>
 <p>**Do not include "https://"</p>
-<h6>Version 1.0 by Bill Brightbulb</h6>
+<h6>Version 2.0 by Bill Brightbulb and Maggie Huang</h6>
 <script> 
 function numToMonth(m){
 	switch(m){
@@ -118,6 +118,7 @@ function numToMonth(m){
 		case 12:
 			return " Dec. ";
 	}
+	return undefined;
 }
 function citeBook(){
     //var mm1 = numToMonth(parseInt(document.getElementById("date1A").value.substring(5, 7), 10));
@@ -182,10 +183,10 @@ function citeBook(){
     	}
     	lname3 += ", ";
     }
-    if(undefined === yyyy1){
+    if(yyyy1 === undefined){
     	yyyy1="";
     }
-    if(city.length>0 && 1900>parseInt(yyyy1, 10)){
+    if(city.length>0){
     	if(publisher.length===0){
     		publisher="n. p";
     	}
@@ -210,7 +211,6 @@ function citeWeb(){
     var yyyy2 = document.getElementById("date2B").value.substring(0, 4);
     var title = document.getElementById("titleB").value;
     var publisher = document.getElementById("publisherB").value;
-    var city = document.getElementById("cityB").value;
     var fname1 = document.getElementById("fname1B").value;
     var mname1 = document.getElementById("mname1B").value;
     var lname1 = document.getElementById("lname1B").value;
@@ -257,21 +257,38 @@ function citeWeb(){
     if((fname1.length>0 || mname1.length>0) && lname1.length>0){
     	lname1 += ", ";
     }
-    if(undefined === yyyy1){
-    	yyyy1="";
+    if(dd1.value === undefined){
+      if(undefined === mm1) {
+        // if(undefined === yyyy1){
+    	    mm1 = "";
+    	    yyyy1 = "n. d.";
+        // }
+      }
+      dd1 = "";
     }
-    if(publisher === siteName && siteName.length >0){
+    if(dd2.value === undefined){
+      var today = new Date();
+      if(undefined === mm2){
+        // if(undefined === yyyy2){
+    	    yyyy2 = today.getFullYear();
+        // }
+    	  mm2 = numToMonth(today.getMonth()+1);
+    	  dd2 = today.getDate();
+      }
+    }
+    if((publisher === siteName && siteName.length > 0) || publisher.length === 0){
       publisher = "";
+    } else {
+      publisher += ". ";
     }
-    if(city.length>0 && 1900>parseInt(yyyy1, 10)){
-    	publisher = city + ", " + publisher;
+    if(title.substring(title.length-1) === "." || title.substring(title.length-1) === "?" || title.substring(title.length-1) === "!"){
+      title += "\” ";
+    } else {
+      title += ".\” ";
     }
-    if(yyyy1.length > 0){
-    	yyyy1 = "., " + yyyy1;
-    }
-    document.getElementById("web1").innerHTML=lname1+fname1+mname1+fname2+mname2+lname2+plural + "\“" + title +"\”";
+    document.getElementById("web1").innerHTML=lname1+fname1+mname1+fname2+mname2+lname2+plural + "\“" + title;
     document.getElementById("web2").innerHTML=siteName;
-    document.getElementById("web3").innerHTML=". " + publisher + dd1 + mm1 + yyyy1 + url + ". Accessed " + dd2 + mm2 + yyyy2;
+    document.getElementById("web3").innerHTML=". " + publisher + dd1 + mm1 + yyyy1 + ", " + url + ". Accessed " + dd2 + mm2 + yyyy2 + ".";
 }
 </script>
 </body>
